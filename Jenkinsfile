@@ -7,7 +7,6 @@ pipeline {
         SSH_USER = 'vagrant'
         SSH_KEY = credentials('vagrant-ssh-key')
     }
-
     stages {
         stage('Checkout') {
              steps {
