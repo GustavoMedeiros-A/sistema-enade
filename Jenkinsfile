@@ -5,7 +5,7 @@ pipeline {
         VM_IP = '127.0.0.1'
         VM_PORT = '2202'
         SSH_USER = 'vagrant'
-        SSH_KEY = credentials('vagrant-ssh-key')
+        SSH_KEY = 'vagrant-ssh-key'
     }
 
     stages {
@@ -31,11 +31,18 @@ pipeline {
             }
         }
 
+        stage('Debug') {
+           steps {
+                sh 'echo $SSH_KEY'
+                sh 'ls -la /var/lib/jenkins/workspace/enade-pipeline@tmp/secretFiles'
+            }
+        }
+
         stage('Copy Docker Image to VM') {
             steps {
-                sshagent(['vagrant-ssh-key']) {
+                sshagent([SSH_KEY]) {
                     sh """
-                        scp -P ${VM_PORT} -i /var/lib/jenkins/workspace/enade-pipeline@tmp/secretFiles/ssh-key-SSH_KEY enade-app.tar ${SSH_USER}@${VM_IP}:/home/${SSH_USER}/enade-app.tar
+                        scp -P ${VM_PORT} enade-app.tar ${SSH_USER}@${VM_IP}:/home/${SSH_USER}/enade-app.tar
                     """
                 }
             }
@@ -43,9 +50,9 @@ pipeline {
 
         stage('Load Docker Image on VM') {
             steps {
-                sshagent(['vagrant-ssh-key']) {
+                sshagent([SSH_KEY]) {
                     sh """
-                        ssh -p ${VM_PORT} -i /var/lib/jenkins/workspace/enade-pipeline@tmp/secretFiles/ssh-key-SSH_KEY ${SSH_USER}@${VM_IP} 'docker load -i /home/${SSH_USER}/enade-app.tar'
+                        ssh -p ${VM_PORT} ${SSH_USER}@${VM_IP} 'docker load -i /home/${SSH_USER}/enade-app.tar'
                     """
                 }
             }
@@ -53,9 +60,9 @@ pipeline {
 
         stage('Deploy Application') {
             steps {
-                sshagent(['vagrant-ssh-key']) {
+                sshagent([SSH_KEY]) {
                     sh """
-                        ssh -p ${VM_PORT} -i /var/lib/jenkins/workspace/enade-pipeline@tmp/secretFiles/ssh-key-SSH_KEY ${SSH_USER}@${VM_IP} 'docker run -d --name enade-app -p 8080:8080 enade-app:latest'
+                        ssh -p ${VM_PORT} ${SSH_USER}@${VM_IP} 'docker run -d --name enade-app -p 8080:8080 enade-app:latest'
                     """
                 }
             }
