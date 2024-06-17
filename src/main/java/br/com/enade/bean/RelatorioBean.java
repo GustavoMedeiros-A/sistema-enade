@@ -13,21 +13,21 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import br.com.enade.util.Relatorio;
+
 /**
  *
  * @author claud
  */
 @Named
 @ViewScoped
-public class RelatorioBean implements Serializable{
+public class RelatorioBean implements Serializable {
 
-   
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String relatorio;
-    
+    private String relatorio;
+
     private Map<String, String> tipos;
-    
+
     public RelatorioBean() {
         tipos = new HashMap<String, String>();
         tipos.put("Relatorio de Alunos", "ListaAlunos");
@@ -51,10 +51,10 @@ public class RelatorioBean implements Serializable{
     public void setTipos(Map<String, String> tipos) {
         this.tipos = tipos;
     }
-    
+
     public void gerarRelatorio() {
-        Relatorio relatorio = new Relatorio();
-        relatorio.getRelatorio(this.relatorio);
+        Relatorio novoRelatorio = new Relatorio();
+        novoRelatorio.getRelatorio(this.relatorio);
     }
-    
+
 }

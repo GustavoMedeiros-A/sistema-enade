@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         VM_IP = '127.0.0.1'
-        VM_PORT = '2202'
+        VM_PORT = '2222'
         SSH_USER = 'vagrant'
         SSH_KEY = 'vagrant-ssh-key'
     }

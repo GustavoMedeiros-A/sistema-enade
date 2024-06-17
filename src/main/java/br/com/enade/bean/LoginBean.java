@@ -17,16 +17,17 @@ public class LoginBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject
-	private Tbusuario usuario;
-
-	@Inject
-	UsuarioDao dao;
-
-	@Inject
-	FacesContext context;
-
+	private final Tbusuario usuario;
+	private final UsuarioDao dao;
+	private final FacesContext context;
 	private Tbusuario usuarioLogado;
+
+	@Inject
+	public LoginBean(Tbusuario usuario, UsuarioDao dao, FacesContext context) {
+		this.usuario = usuario;
+		this.dao = dao;
+		this.context = context;
+	}
 
 	public Tbusuario getUsuario() {
 		return usuario;
@@ -38,7 +39,7 @@ public class LoginBean implements Serializable {
 		boolean existe = dao.existe(this.usuario);
 		if (existe) {
 			usuarioLogado = dao.recuperarUsuario(this.usuario);
-			context.getExternalContext().getSessionMap().put("usuarioLogado", usuarioLogado);			
+			context.getExternalContext().getSessionMap().put("usuarioLogado", usuarioLogado);
 			return "index?faces-redirect=true";
 		}
 
@@ -52,7 +53,7 @@ public class LoginBean implements Serializable {
 		context.getExternalContext().getSessionMap().remove("usuarioLogado");
 		return "login?faces-redirect=true";
 	}
-	
+
 	public Tbusuario getUsuarioLogado() {
 		return usuarioLogado;
 	}

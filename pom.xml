@@ -148,6 +148,14 @@
                     <shutdown>kill</shutdown> <!-- Use it if required-->
                 </configuration>
             </plugin>
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.3.2</version> <!-- Updated version -->
+            <configuration>
+                <!-- Your existing configuration -->
+            </configuration>
+        </plugin>
         </plugins>
         <finalName>${project.artifactId}##${project.version}</finalName>
     </build>
