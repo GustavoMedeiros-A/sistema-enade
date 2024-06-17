@@ -10,8 +10,8 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            steps {
-                git 'https://github.com/GustavoMedeiros-A/sistema-enade'
+             steps {
+                git branch: 'main', url: 'https://github.com/GustavoMedeiros-A/sistema-enade'
             }
         }
 
