@@ -1,0 +1,103 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<h2 class="page-header">Prova</h2>
+		<br />
+		<h:form id="formPrincipal">
+			<div align="center">
+
+				<p:dataTable var="lista" value="#{questaoBean.questoes}"
+					id="tabelaQuestao" emptyMessage="Nenhum registro encontrado"
+					paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					paginator="true" rows="10"
+					rowsPerPageTemplate="5,10,25,50,100,9999" style="width:100%">
+
+					<p:column headerText="Código" sortBy="#{lista.idQuestao}"
+						filterBy="#{lista.idQuestao}">
+						<h:outputText value="#{lista.idQuestao}" />
+					</p:column>
+
+					<p:column headerText="Tipo"
+						sortBy="#{lista.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol}"
+						filterBy="#{lista.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol}">
+						<h:outputText
+							value="#{lista.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol}" />
+					</p:column>
+
+					<p:column headerText="Descrição" sortBy="#{lista.descricaoQuestao}"
+						filterBy="#{lista.descricaoQuestao}">
+						<h:outputText value="#{lista.descricaoQuestao}" />
+					</p:column>
+
+					<p:column headerText="Alternativa A" sortBy="#{lista.alternativaA}"
+						filterBy="#{lista.alternativaA}">
+						<h:outputText value="#{lista.alternativaA}" />
+					</p:column>
+
+					<p:column headerText="Alternativa B" sortBy="#{lista.alternativaB}"
+						filterBy="#{lista.alternativaB}">
+						<h:outputText value="#{lista.alternativaB}" />
+					</p:column>
+
+					<p:column headerText="Alternativa C" sortBy="#{lista.alternativaC}"
+						filterBy="#{lista.alternativaC}">
+						<h:outputText value="#{lista.alternativaC}" />
+					</p:column>
+
+					<p:column headerText="Alternativa D" sortBy="#{lista.alternativaD}"
+						filterBy="#{lista.alternativaD}">
+						<h:outputText value="#{lista.alternativaD}" />
+					</p:column>
+
+					<p:column headerText="Alternativa E" sortBy="#{lista.alternativaE}"
+						filterBy="#{lista.alternativaE}">
+						<h:outputText value="#{lista.alternativaE}" />
+					</p:column>
+
+					<p:column headerText="Resposta" sortBy="#{lista.reposta}"
+						filterBy="#{lista.reposta}">
+						<h:outputText value="#{lista.reposta}" />
+					</p:column>
+					<p:column headerText="Opções" exportable="false">
+						<center>
+							<p:commandButton icon="ui-icon-pencil" value="Respota da Questão"
+								onclick="PF('record').show();"
+								update="formPrincipal:panelRecord" process="@this">
+								<f:setPropertyActionListener target="#{questaoBean.questao}"
+									value="#{lista}" />
+							</p:commandButton>
+						</center>
+					</p:column>
+
+				</p:dataTable>
+			</div>
+
+			<p:dialog header="Novo" widgetVar="record" modal="true"
+				focus="resposta">
+
+				<p:panelGrid id="panelRecord" columns="2"> 
+                    Resposta:
+                   <p:selectOneMenu id="resposta"
+						value="#{questaoBean.questao.reposta}" style="width:125px">
+						<f:selectItem itemLabel="Selecione" itemValue="" />
+						<f:selectItem itemLabel="A" itemValue="A" />
+						<f:selectItem itemLabel="B" itemValue="B" />
+						<f:selectItem itemLabel="C" itemValue="C" />
+						<f:selectItem itemLabel="D" itemValue="D" />
+						<f:selectItem itemLabel="E" itemValue="E" />
+						<f:selectItem itemLabel="DISCURSIVA" itemValue="Discursiva" />
+					</p:selectOneMenu>
+				</p:panelGrid>
+				<p:commandButton value="Salvar"
+					actionListener="#{questaoBean.gravar}" onclick="record.hide()"
+					alt="Record" />
+			</p:dialog>
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>

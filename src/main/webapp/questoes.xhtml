@@ -1,0 +1,205 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<h2 class="page-header">Gerenciar Questões</h2>
+		<br />
+		<h:form id="formPrincipal">
+			<div align="center">
+
+				<p:dataTable var="lista" value="#{questaoBean.questoes}"
+					id="tabelaQuestao" emptyMessage="Nenhum registro encontrado"
+					paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					paginator="true" rows="10"
+					rowsPerPageTemplate="5,10,25,50,100,9999" style="width:100%">
+
+					<p:column headerText="Código" sortBy="#{lista.idQuestao}"
+						filterBy="#{lista.idQuestao}">
+						<h:outputText value="#{lista.idQuestao}" />
+					</p:column>
+
+					<p:column headerText="Tipo"
+						sortBy="#{lista.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol}"
+						filterBy="#{lista.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol}">
+						<h:outputText
+							value="#{lista.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol}" />
+					</p:column>
+
+					<p:column headerText="Descrição" sortBy="#{lista.descricaoQuestao}"
+						filterBy="#{lista.descricaoQuestao}">
+						<h:outputText value="#{lista.descricaoQuestao}" />
+					</p:column>
+
+					<p:column headerText="Alternativa A" sortBy="#{lista.alternativaA}"
+						filterBy="#{lista.alternativaA}">
+						<h:outputText value="#{lista.alternativaA}" />
+					</p:column>
+
+					<p:column headerText="Alternativa B" sortBy="#{lista.alternativaB}"
+						filterBy="#{lista.alternativaB}">
+						<h:outputText value="#{lista.alternativaB}" />
+					</p:column>
+
+					<p:column headerText="Alternativa C" sortBy="#{lista.alternativaC}"
+						filterBy="#{lista.alternativaC}">
+						<h:outputText value="#{lista.alternativaC}" />
+					</p:column>
+
+					<p:column headerText="Alternativa D" sortBy="#{lista.alternativaD}"
+						filterBy="#{lista.alternativaD}">
+						<h:outputText value="#{lista.alternativaD}" />
+					</p:column>
+
+					<p:column headerText="Alternativa E" sortBy="#{lista.alternativaE}"
+						filterBy="#{lista.alternativaE}">
+						<h:outputText value="#{lista.alternativaE}" />
+					</p:column>
+
+					<p:column headerText="Alternativa Correta"
+						sortBy="#{lista.questaoCorreta}"
+						filterBy="#{lista.questaoCorreta}">
+						<h:outputText value="#{lista.questaoCorreta}" />
+					</p:column>
+
+					<p:column headerText="Status" sortBy="#{lista.estadoQuestao}"
+						filterBy="#{lista.estadoQuestao}">
+						<h:outputText value="#{lista.estadoQuestao}" />
+					</p:column>
+
+					<p:column headerText="Opções" exportable="false">
+						<center>
+
+							<p:commandButton icon="ui-icon-pencil" value="Editar"
+								onclick="PF('record').show();">
+								<f:setPropertyActionListener target="#{questaoBean.questao}"
+									value="#{lista}" />
+							</p:commandButton>
+
+						</center>
+					</p:column>
+
+				</p:dataTable>
+			</div>
+			<br />
+
+			<p:column>
+				<p:commandButton icon="ui-icon-plus" value="Novo"
+					onclick="PF('record').show();">
+				</p:commandButton>
+
+			</p:column>
+
+			<div align="center">
+				<h3>Exportar dados da página</h3>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/excel.png" width="24" />
+					<p:dataExporter type="xls" target="tabelaQuestao" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/pdf.png" width="24" />
+					<p:dataExporter type="pdf" target="tabelaQuestao" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/csv.png" width="24" />
+					<p:dataExporter type="csv" target="tabelaQuestao" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/xml.png" width="24" />
+					<p:dataExporter type="xml" target="tabelaQuestao" fileName="arq" />
+				</h:commandLink>
+			</div>
+
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+
+			<p:dialog header="Novo" widgetVar="record" modal="true" focus="tipo">
+				<p:panelGrid id="panelRecord" columns="2"> 
+                    TIPO DA QUESTÃO:
+                    <p:selectOneMenu id="tipo"
+						value="#{questaoBean.tipoQuestaoId}" style="width:125px">
+						<f:selectItems value="#{questaoBean.tipoQuestoes}"
+							var="tipoUsuario" itemLabel="#{tipoUsuario.nomeTipoQuestaocol}"
+							itemValue="#{tipoUsuario.idTipoQuestao}" />
+						<p:ajax update="a" />
+						<p:ajax update="b" />
+						<p:ajax update="c" />
+						<p:ajax update="d" />
+						<p:ajax update="e" />
+					</p:selectOneMenu>
+					Provas:
+					 <p:selectOneMenu id="prova" value="#{questaoBean.provaId}"
+						style="width:125px">
+						<f:selectItems value="#{questaoBean.provas}" var="prova"
+							itemLabel="#{prova.idProva}" itemValue="#{prova.idProva}" />
+					</p:selectOneMenu>
+                    DESCRIÇÃO:
+                    <p:inputTextarea id="desc"
+						value="#{questaoBean.questao.descricaoQuestao}" />
+                    ALTERANTIVA A:
+                    <p:inputTextarea id="a"
+						value="#{questaoBean.questao.alternativaA}"
+						disabled="#{questaoBean.questao.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol == 'Discursiva Geral' || 
+                        questaoBean.questao.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol == 'Discursiva Especifica'}" />
+                    ALTERANTIVA B:
+                    <p:inputTextarea id="b"
+						value="#{questaoBean.questao.alternativaB}"
+						disabled="#{questaoBean.questao.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol == 'Discursiva Geral' || 
+                        questaoBean.questao.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol == 'Discursiva Especifica'}" />
+                    ALTERANTIVA C:
+                    <p:inputTextarea id="c"
+						value="#{questaoBean.questao.alternativaC}"
+						disabled="#{questaoBean.questao.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol == 'Discursiva Geral' || 
+                        questaoBean.questao.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol == 'Discursiva Especifica'}" />
+                    ALTERANTIVA D:
+                    <p:inputTextarea id="d"
+						value="#{questaoBean.questao.alternativaD}"
+						disabled="#{questaoBean.questao.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol == 'Discursiva Geral' || 
+                        questaoBean.questao.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol == 'Discursiva Especifica'}" />
+                    ALTERANTIVA E:
+                    <p:inputTextarea id="e"
+						value="#{questaoBean.questao.alternativaE}"
+						disabled="#{questaoBean.questao.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol == 'Discursiva Geral' || 
+                        questaoBean.questao.tbTipoQuestaoidTipoQuestao.nomeTipoQuestaocol == 'Discursiva Especifica'}" />
+                    ALTERANTIVA CORRETA:
+                    <p:selectOneMenu id="correto"
+						value="#{questaoBean.questao.questaoCorreta}" style="width:155px">
+						<f:selectItem itemLabel="Selecione" itemValue="" />
+						<f:selectItem itemLabel="ALTERNATIVA A" itemValue="A" />
+						<f:selectItem itemLabel="ALTERNATIVA B" itemValue="B" />
+						<f:selectItem itemLabel="ALTERNATIVA C" itemValue="C" />
+						<f:selectItem itemLabel="ALTERNATIVA D" itemValue="D" />
+						<f:selectItem itemLabel="ALTERNATIVA E" itemValue="E" />
+						<f:selectItem itemLabel="DISCURSIVA" itemValue="Discursiva" />
+					</p:selectOneMenu>
+                    STATUS:
+                    <p:selectOneMenu id="status"
+						value="#{questaoBean.questao.estadoQuestao}" style="width:125px">
+						<f:selectItem itemLabel="Selecione" itemValue="" />
+						<f:selectItem itemLabel="Validado" itemValue="Valido" />
+						<f:selectItem itemLabel="Em Análise" itemValue="Em Analise" />
+						<f:selectItem itemLabel="Anulado" itemValue="Anulado" />
+					</p:selectOneMenu>
+
+				</p:panelGrid>
+				<br />
+				<p:commandButton value="Salvar"
+					actionListener="#{questaoBean.gravar}" onclick="record.hide()"
+					alt="Record" />
+
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

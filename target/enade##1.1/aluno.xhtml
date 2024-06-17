@@ -1,0 +1,114 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<h2 class="page-header">Dados do Aluno</h2>
+		<br />
+		<h:form id="formPrincipal">
+			<div align="center">
+				<p:dataTable var="lista" value="#{usuarioBean.usuarios}"
+					id="tabelaAgent" emptyMessage="Nenhum registro encontrado"
+					paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					paginator="true" rows="10"
+					rowsPerPageTemplate="5,10,25,50,100,9999" style="width:100%">
+
+
+					<p:column headerText="Nome" sortBy="#{lista.nomeUsuario}"
+						filterBy="#{lista.nomeUsuario}">
+						<h:outputText value="#{lista.nomeUsuario}"
+							rendered="#{lista.tbTipoUsuarioidTipoUsuario.idTipoUsuario == 2}" />
+					</p:column>
+
+					<p:column headerText="Email" sortBy="#{lista.emailUsuario}"
+						filterBy="#{lista.emailUsuario}">
+						<h:outputText value="#{lista.emailUsuario}"
+							rendered="#{lista.tbTipoUsuarioidTipoUsuario.idTipoUsuario == 2}" />
+					</p:column>
+
+					<p:column headerText="Tipo"
+						sortBy="#{lista.tbTipoUsuarioidTipoUsuario.nomeTipoUsuario}"
+						filterBy="#{lista.tbTipoUsuarioidTipoUsuario.nomeTipoUsuario}">
+						<h:outputText
+							value="#{lista.tbTipoUsuarioidTipoUsuario.nomeTipoUsuario}"
+							rendered="#{lista.tbTipoUsuarioidTipoUsuario.idTipoUsuario == 2}" />
+					</p:column>
+
+					<p:column headerText="Opções" exportable="false">
+						<center>
+							<p:commandButton icon="ui-icon-pencil" value="Editar"
+								onclick="PF('record').show();" update="formPrincipal:panelRecord" process="@this"
+								rendered="#{lista.tbTipoUsuarioidTipoUsuario.idTipoUsuario == 2}">
+								<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+									value="#{lista}" />
+							</p:commandButton>
+						</center>
+					</p:column>
+
+				</p:dataTable>
+			</div>
+			<br />
+
+			<div align="center">
+				<h3>Exportar dados da página</h3>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/excel.png" width="24" />
+					<p:dataExporter type="xls" target="tabelaAgent" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/pdf.png" width="24" />
+					<p:dataExporter type="pdf" target="tabelaAgent" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/csv.png" width="24" />
+					<p:dataExporter type="csv" target="tabelaAgent" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/xml.png" width="24" />
+					<p:dataExporter type="xml" target="tabelaAgent" fileName="arq" />
+				</h:commandLink>
+			</div>
+
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+
+			<p:dialog header="Novo" widgetVar="record" modal="true" focus="name">
+
+				<p:panelGrid id="panelRecord" columns="2"> 
+                    Nome:
+                    <p:inputText id="name"
+						value="#{usuarioBean.usuario.nomeUsuario}" />
+                    Email:
+                    <p:inputText id="email"
+						value="#{usuarioBean.usuario.emailUsuario}" />
+                    Tipo de Usuário:
+                   <p:selectOneMenu id="tipoUsuario"
+						value="#{usuarioBean.tipoUsuarioId}" style="width:125px">
+						<f:selectItems value="#{usuarioBean.tipoUsuarios}"
+							var="tipoUsuario" itemLabel="#{tipoUsuario.nomeTipoUsuario}"
+							itemValue="#{tipoUsuario.idTipoUsuario}"/>
+					</p:selectOneMenu>
+                    Senha:
+                    <p:password id="senha"
+						value="#{usuarioBean.usuario.senhaUsuario}" required="true"/>
+				</p:panelGrid>
+				<br />
+				<p:commandButton value="Salvar"
+					actionListener="#{usuarioBean.salvar}" onclick="record.hide()"
+					alt="Record"  />
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

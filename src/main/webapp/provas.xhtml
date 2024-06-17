@@ -1,0 +1,110 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<h2 class="page-header">Gerenciar Provas</h2>
+		<br />
+		<h:form id="formPrincipal">
+			<div align="center">
+
+				<p:dataTable var="lista" value="#{provaBean.provas}"
+					id="tabelaProva" emptyMessage="Nenhum registro encontrado"
+					paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					paginator="true" rows="10"
+					rowsPerPageTemplate="5,10,25,50,100,9999" style="width:100%">
+
+					<p:column headerText="Código" sortBy="#{lista.idProva}"
+						filterBy="#{lista.idProva}">
+						<h:outputText value="#{lista.idProva}" />
+					</p:column>
+
+					<p:column headerText="Data" sortBy="#{lista.dataProva.time}"
+						filterBy="#{lista.dataProva.time}">
+						<p:outputLabel value="#{lista.dataProva.time}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="America/São_Paulo" />
+						</p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Opções" exportable="false">
+						<center>
+
+							<p:commandButton icon="ui-icon-pencil" value="Editar"
+								onclick="PF('record').show();"
+								update="formPrincipal:panelRecord" process="@this">
+								<f:setPropertyActionListener target="#{provaBean.prova}"
+									value="#{lista}" />
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-trash" value="Deletar"
+								action="#{provaBean.remover(lista)}" process="@this"
+								update="@form" />
+						</center>
+					</p:column>
+
+				</p:dataTable>
+			</div>
+			<br />
+
+			<p:column>
+				<p:commandButton icon="ui-icon-plus" value="Novo"
+					onclick="PF('record').show();">
+				</p:commandButton>
+
+			</p:column>
+
+			<div align="center">
+				<h3>Exportar dados da página</h3>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/excel.png" width="24" />
+					<p:dataExporter type="xls" target="tabelaProva" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/pdf.png" width="24" />
+					<p:dataExporter type="pdf" target="tabelaProva" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/csv.png" width="24" />
+					<p:dataExporter type="csv" target="tabelaProva" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/xml.png" width="24" />
+					<p:dataExporter type="xml" target="tabelaProva" fileName="arq" />
+				</h:commandLink>
+			</div>
+
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+
+			<p:dialog header="Novo" widgetVar="record" modal="true" focus="data">
+				<p:panelGrid id="panelRecord" columns="2">
+					<p:outputLabel value="Data:" for="data" />
+					<p:calendar id="data" value="#{provaBean.prova.dataProva.time}"
+						timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" mask="true" />
+					<p:outputLabel for="questao" value="Questões" />
+					<p:selectOneMenu value="#{provaBean.questaoId}" id="questao">
+						<f:selectItems value="#{provaBean.questoes}" var="questao"
+							itemLabel="#{questao.idQuestao}" itemValue="#{questao.idQuestao}" />
+					</p:selectOneMenu>
+				</p:panelGrid>
+				<br />
+				<p:commandButton value="Salvar" actionListener="#{provaBean.grava}"
+					onclick="record.hide()" alt="Record" />
+			</p:dialog>
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>

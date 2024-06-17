@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SISTEMA ENADE</title>
+    </h:head>
+    <h:body style="background-color: #6E94FF">
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="190" resizable="true"
+                          closable="true" collapsible="true">
+                <img src="resources/images/uniacademia.png" alt="" />
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                <h:form id="formLogin">
+                    <p:panel
+                        style="text-align: center; width: 800px; margin: auto; margin-top: 80px;">
+
+                        <f:facet name="header">LOGIN</f:facet>
+                        <br />
+                        <h:panelGrid columns="1" width="100%">
+                            <p style="margin: 0; font-weight: bold;">Login</p>
+                            <span class="ui-float-label"> <p:inputText id="txtLogin"
+                                                                       value="#{loginBean.usuario.emailUsuario}" /><br />
+                            </span>
+                            <p style="margin: 0; font-weight: bold;">Senha</p>
+                            <p:password id="txtSenha"
+                                        value="#{loginBean.usuario.senhaUsuario}" label="Senha"
+                                        required="true" />
+                        </h:panelGrid>
+                        <br />
+                        <h:form id="formid">
+                            <h:messages globalOnly="true" />
+                        </h:form>
+                        <p:commandButton value="Login" action="#{loginBean.efetuaLogin}"
+                                         update="@form" process="@form" />
+                        <p:commandButton value="Cadastro de Aluno" action="#{usuarioBean.cadastroAluno}"/>
+                    </p:panel>
+
+
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>

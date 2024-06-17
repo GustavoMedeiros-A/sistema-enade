@@ -1,0 +1,77 @@
+<ui:composition template="/WEB-INF/templates/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<h2 class="page-header">Gerenciar Resultados</h2>
+		<br />
+		<h:form id="formPrincipal">
+			<div align="center">
+
+				<p:dataTable var="lista" value="#{resultadoBean.listResultado}"
+					id="tabelaNota" emptyMessage="Nenhum registro encontrado"
+					paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					paginator="true" rows="10"
+					rowsPerPageTemplate="5,10,25,50,100,9999" style="width:100%">
+
+
+					<p:column headerText="Aluno"
+						sortBy="#{lista.tbUsuarioidUsuario.nomeUsuario}"
+						filterBy="#{lista.idUsuario.nomeUsuario}">
+						<h:outputText value="#{lista.tbUsuarioidUsuario.nomeUsuario}" />
+					</p:column>
+
+					<p:column headerText="Prova"
+						sortBy="#{lista.tbProvaidProva.dataProva.time}"
+						filterBy="#{lista.tbProvaidProva.dataProva.time}">
+						<h:outputText value="#{lista.tbProvaidProva.dataProva.time}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="America/São_Paulo" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Nota" sortBy="#{lista.valorObtido}"
+						filterBy="#{lista.valorObtido}">
+						<h:outputText value="#{lista.valorObtido}" />
+					</p:column>
+
+				</p:dataTable>
+			</div>
+			<br />
+
+			<div align="center">
+				<h3>Exportar dados da página</h3>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/excel.png" width="24" />
+					<p:dataExporter type="xls" target="tabelaNota" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/pdf.png" width="24" />
+					<p:dataExporter type="pdf" target="tabelaNota" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/csv.png" width="24" />
+					<p:dataExporter type="csv" target="tabelaNota" fileName="arq" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<p:graphicImage name="images/exports/xml.png" width="24" />
+					<p:dataExporter type="xml" target="tabelaNota" fileName="arq" />
+				</h:commandLink>
+			</div>
+
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
