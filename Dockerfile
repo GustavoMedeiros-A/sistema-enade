@@ -1,5 +1,5 @@
 # Step 1: Build the Java application using Maven
-FROM maven:3.8.8-openjdk-8-slim AS build
+FROM maven:3.8.1-jdk-8 AS build
 
 # Set the working directory
 WORKDIR /app
