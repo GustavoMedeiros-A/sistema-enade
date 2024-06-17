@@ -7,9 +7,10 @@ pipeline {
         SSH_USER = 'vagrant'
         SSH_KEY = credentials('vagrant-ssh-key')
     }
+
     stages {
         stage('Checkout') {
-             steps {
+            steps {
                 git branch: 'main', url: 'https://github.com/GustavoMedeiros-A/sistema-enade'
             }
         }
@@ -32,9 +33,9 @@ pipeline {
 
         stage('Copy Docker Image to VM') {
             steps {
-                sshagent([SSH_KEY]) {
+                sshagent(['vagrant-ssh-key']) {
                     sh """
-                        scp -P ${VM_PORT} -i ${SSH_KEY} enade-app.tar ${SSH_USER}@${VM_IP}:/home/${SSH_USER}/enade-app.tar
+                        scp -P ${VM_PORT} -i /var/lib/jenkins/workspace/enade-pipeline@tmp/secretFiles/ssh-key-SSH_KEY enade-app.tar ${SSH_USER}@${VM_IP}:/home/${SSH_USER}/enade-app.tar
                     """
                 }
             }
@@ -42,9 +43,9 @@ pipeline {
 
         stage('Load Docker Image on VM') {
             steps {
-                sshagent([SSH_KEY]) {
+                sshagent(['vagrant-ssh-key']) {
                     sh """
-                        ssh -p ${VM_PORT} -i ${SSH_KEY} ${SSH_USER}@${VM_IP} 'docker load -i /home/${SSH_USER}/enade-app.tar'
+                        ssh -p ${VM_PORT} -i /var/lib/jenkins/workspace/enade-pipeline@tmp/secretFiles/ssh-key-SSH_KEY ${SSH_USER}@${VM_IP} 'docker load -i /home/${SSH_USER}/enade-app.tar'
                     """
                 }
             }
@@ -52,9 +53,9 @@ pipeline {
 
         stage('Deploy Application') {
             steps {
-                sshagent([SSH_KEY]) {
+                sshagent(['vagrant-ssh-key']) {
                     sh """
-                        ssh -p ${VM_PORT} -i ${SSH_KEY} ${SSH_USER}@${VM_IP} 'docker run -d --name enade-app -p 8080:8080 enade-app:latest'
+                        ssh -p ${VM_PORT} -i /var/lib/jenkins/workspace/enade-pipeline@tmp/secretFiles/ssh-key-SSH_KEY ${SSH_USER}@${VM_IP} 'docker run -d --name enade-app -p 8080:8080 enade-app:latest'
                     """
                 }
             }
