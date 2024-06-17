@@ -42,6 +42,7 @@ pipeline {
             steps {
                 sshagent([SSH_KEY]) {
                     sh """
+                        ssh-keyscan -p ${VM_PORT} ${VM_IP} >> ~/.ssh/known_hosts
                         scp -P ${VM_PORT} enade-app.tar ${SSH_USER}@${VM_IP}:/home/${SSH_USER}/enade-app.tar
                     """
                 }
