@@ -37,6 +37,16 @@ pipeline {
                 sh 'ls -la /var/lib/jenkins/workspace/enade-pipeline@tmp/secretFiles'
             }
         }
+        stage('Prepare SSH') {
+            steps {
+                script {
+                    sh """
+                        mkdir -p /var/lib/jenkins/.ssh
+                        chmod 700 /var/lib/jenkins/.ssh
+                    """
+                }
+            }
+        }
 
         stage('Copy Docker Image to VM') {
             steps {
